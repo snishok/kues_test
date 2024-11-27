@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kues/listvew_with_filters/domain/entity/character.dart';
 import 'package:kues/listvew_with_filters/presentation/using_bloc/cart_page/bloc/cart_bloc.dart';
 import 'package:kues/listvew_with_filters/presentation/using_bloc/cart_page/bloc/cart_event.dart';
-import 'package:kues/listvew_with_filters/presentation/using_bloc/cart_page/data/cart_item.dart';
 import 'package:kues/listvew_with_filters/presentation/using_bloc/details_page/bloc/character_details_bloc.dart';
 import 'package:kues/listvew_with_filters/presentation/using_bloc/details_page/bloc/quantity_cubit.dart';
 

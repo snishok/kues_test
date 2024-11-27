@@ -6,7 +6,6 @@ import 'package:kues/listvew_with_filters/data/source/network/api.dart';
 import 'package:kues/listvew_with_filters/domain/usecase/get_all_characters.dart';
 import 'package:kues/listvew_with_filters/presentation/theme.dart';
 import 'package:kues/listvew_with_filters/presentation/using_bloc/app_using_bloc.dart';
-import 'package:kues/listvew_with_filters/presentation/using_bloc/cart_page/data/cart_item.dart';
 import 'package:kues/listvew_with_filters/presentation/using_bloc/cart_page/view/cart_view.dart';
 import 'package:kues/main.dart';
 

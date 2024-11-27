@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:kues/listvew_with_filters/domain/entity/character.dart';
-import 'package:kues/listvew_with_filters/presentation/using_bloc/cart_page/data/cart_item.dart';
 
 
 class CartState extends Equatable {

@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:kues/listvew_with_filters/domain/entity/character.dart';
-import '../data/cart_item.dart';
 
 
 abstract class CartEvent extends Equatable {
