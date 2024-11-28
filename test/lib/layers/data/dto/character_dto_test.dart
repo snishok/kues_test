@@ -9,21 +9,17 @@ void main() {
 
     setUp(() {
       referenceDto = CharacterDto(
-        id: 1,
-        name: 'Rick Sanchez',
-        status: 'Alive',
-        species: 'Human',
-        type: 'Super genius',
-        gender: 'Male',
-        origin: LocationDto(name: 'Earth', url: 'https://example.com/earth'),
-        location: LocationDto(name: 'Earth', url: 'https://example.com/earth'),
-        image: 'https://example.com/rick.png',
-        episode: [
-          'https://example.com/episode1',
-          'https://example.com/episode2',
-        ],
-        url: 'https://example.com/character/1',
-        created: DateTime.parse('2022-01-01T12:00:00Z'),
+          id: 4,
+          name: 'Pizza Tuscan Sun Delight',
+          desc: 'Indulge in the perfect harmony of gooey cheese, rich tomato sauce, and golden, crispy crust. Topped with the freshest ingredients for an irresistible burst of flavor. A slice of heaven in every bite!',
+          kcal: '923',
+          grams: '300',
+          proteins: '20',
+          fats: '250',
+          carb: '100',
+          cost: '35.00',
+          image: 'https://jzgmnvzpovllorpsichi.supabase.co/storage/v1/object/public/images/test_images/Pizza.png',
+          quantity: 1
       );
 
       referenceRawJson = referenceDto.toRawJson();
