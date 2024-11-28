@@ -169,8 +169,8 @@ class __ContentState extends State<_Content> with TickerProviderStateMixin{
                       Container(
                         padding: const EdgeInsets.only(left: 24, right: 16,top: 8, bottom: 8),
                         alignment: Alignment.topLeft,
-                        child: Text('Hits Of the week', style: textTheme.headlineSmall!.copyWith(
-                          fontWeight: FontWeight.bold,),),
+                        child: Text('Hits of the week', style: textTheme.headlineSmall!.copyWith(
+                          fontWeight: FontWeight.w600,),),
                       ),
 
                       CarouselSlider(
@@ -238,51 +238,53 @@ class __ContentState extends State<_Content> with TickerProviderStateMixin{
       return AnimatedBuilder(
       animation: _animation,
       builder: (context, child) {
-        return Visibility(
-            visible: isVisible,
-            child: AnimatedContainer(
-              margin: EdgeInsets.symmetric(horizontal: 16, vertical: _animation.value),
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              duration: Duration(seconds: 2),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Cart",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
+        return GestureDetector(
+          onTap: () {
+            _goToCart();
+          },
+          child: Visibility(
+              visible: isVisible,
+              child: AnimatedContainer(
+                margin: EdgeInsets.symmetric(horizontal: 16, vertical: _animation.value),
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                duration: Duration(seconds: 2),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Cart",
+                      style: textTheme.bodyLarge!.copyWith(
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        "24 min",
-                        style: TextStyle(
-                          color: Colors.grey[400],
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
+                    Row(
+                      children: [
+                        Text(
+                          "24 min",
+                          style: textTheme.labelMedium!.copyWith(
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 8),
-                      Text(
-                        "• \$ ${state.totalPrice}",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
+                        SizedBox(width: 8),
+                        Text(
+                          "• \$${state.totalPrice.toStringAsFixed(2)}",
+                          style: textTheme.bodyLarge!.copyWith(
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ));
+                      ],
+                    ),
+                  ],
+                ),
+              )),
+        );
+
+
+
       });
 
 
@@ -395,13 +397,17 @@ class __ContentState extends State<_Content> with TickerProviderStateMixin{
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    item.name ?? '',
-                    style: textTheme.bodyLarge!.copyWith(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
+                  Container(
+                    width: MediaQuery.sizeOf(context).width * 0.4,
+                    child: Text(
+                      item.name ?? '',
+                      style: textTheme.bodyLarge!.copyWith(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
+
                   Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

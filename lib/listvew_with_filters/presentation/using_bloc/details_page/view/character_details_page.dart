@@ -154,11 +154,11 @@ class _Content extends StatelessWidget {
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 5),
                   childrenDelegate: SliverChildListDelegate(
                     [
-                      _buildNutritionInfo('325','kcal'),
-                      _buildNutritionInfo('420','grams'),
-                      _buildNutritionInfo('21','proteins'),
-                      _buildNutritionInfo('19','fats'),
-                      _buildNutritionInfo('65','carbs'),
+                      _buildNutritionInfo(character.kcal!,'kcal'),
+                      _buildNutritionInfo(character.grams!,'grams'),
+                      _buildNutritionInfo(character.proteins!,'proteins'),
+                      _buildNutritionInfo(character.fats!,'fats'),
+                      _buildNutritionInfo(character.carb!,'carbs'),
                     ],
                   ),
                 )

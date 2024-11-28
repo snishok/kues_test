@@ -72,8 +72,8 @@ class _ItemDescription extends StatelessWidget {
                 Text(
                   item.name ?? '',
                   style: textTheme.bodyMedium!.copyWith(
-                    color: colorScheme.onSurfaceVariant,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
                   ),
                 ),
                 const SizedBox(height: 12),
