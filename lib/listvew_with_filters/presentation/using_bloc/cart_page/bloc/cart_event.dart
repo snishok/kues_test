@@ -26,3 +26,22 @@ class RemoveFromCart extends CartEvent {
 }
 
 class ClearCart extends CartEvent {}
+
+
+class IncrementQuantity extends CartEvent {
+  final Character item;
+
+  IncrementQuantity(this.item);
+
+  @override
+  List<Object?> get props => [item];
+}
+
+class DecrementQuantity extends CartEvent {
+  final Character item;
+
+  DecrementQuantity(this.item);
+
+  @override
+  List<Object?> get props => [item];
+}

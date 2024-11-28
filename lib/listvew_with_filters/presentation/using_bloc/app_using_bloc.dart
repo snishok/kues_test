@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kues/listvew_with_filters/domain/usecase/get_all_characters.dart';
 import 'package:kues/listvew_with_filters/domain/usecase/get_all_characters.dart';
+import 'package:kues/listvew_with_filters/presentation/using_bloc/cart_page/bloc/quantity_cubit.dart';
 import 'package:kues/listvew_with_filters/presentation/using_bloc/list_page/view/character_page.dart';
 
 import 'cart_page/bloc/cart_bloc.dart';

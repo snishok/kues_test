@@ -6,6 +6,7 @@ import 'package:kues/listvew_with_filters/domain/entity/character.dart';
 import 'package:kues/listvew_with_filters/domain/usecase/get_all_characters.dart';
 import 'package:kues/listvew_with_filters/presentation/shared/character_list_item.dart';
 import 'package:kues/listvew_with_filters/presentation/shared/character_list_item_loading.dart';
+import 'package:kues/listvew_with_filters/presentation/using_bloc/cart_page/bloc/quantity_cubit.dart';
 import 'package:kues/listvew_with_filters/presentation/using_bloc/cart_page/data/cart_repo.dart';
 import 'package:kues/listvew_with_filters/presentation/using_bloc/cart_page/view/cart_view.dart';
 import 'package:kues/listvew_with_filters/presentation/using_bloc/details_page/bloc/character_details_bloc.dart';
@@ -84,12 +85,13 @@ class __ContentState extends State<_Content> {
           leading: IconButton(
             icon: const Icon(Icons.menu, color: Colors.black),
             onPressed: () {
+              _goToCart();
               // Handle menu button press
-              Navigator.push(
+              /*Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => CartPage()),
-              );
+              );*/
             },
           ),
           centerTitle: true,
@@ -363,6 +365,22 @@ class __ContentState extends State<_Content> {
     );
     /*final route = CharacterDetailsPage.route(character: character);
     Navigator.of(context).push(route);*/
+  }
+
+  void _goToCart() {
+
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (context) => FractionallySizedBox(
+      heightFactor: 0.9,
+      child:BlocProvider(
+        create: (context) => CartQuantityCubit(),
+        child: CartPage(),
+      ),
+      ),
+      backgroundColor: Colors.transparent,
+    );
   }
 
   @override
