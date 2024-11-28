@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kues/listvew_with_filters/domain/entity/character.dart';
 import 'package:kues/listvew_with_filters/presentation/using_bloc/cart_page/data/cart_repo.dart';
 import 'cart_event.dart';
 import 'cart_state.dart';
@@ -39,9 +40,12 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           }
           return item;
         }).toList();
-
+      repository.clearCart();
+      for (var item in updatedCart) {
+        repository.addItem(item);
+      }
         emit(CartState(
-          items: updatedCart,
+          items: repository.items,
           totalPrice: repository.totalPrice,
         ));
     });
@@ -54,9 +58,13 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           }
           return item;
         }).toList();
+      repository.clearCart();
+      for (var item in updatedCart) {
+          repository.addItem(item);
+      }
 
         emit(CartState(
-          items: updatedCart,
+          items: repository.items,
           totalPrice: repository.totalPrice,
         ));
     });

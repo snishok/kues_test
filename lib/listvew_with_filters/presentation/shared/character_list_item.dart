@@ -73,10 +73,10 @@ class _ItemDescription extends StatelessWidget {
                   item.name ?? '',
                   style: textTheme.bodyMedium!.copyWith(
                     color: colorScheme.onSurfaceVariant,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 12),
                 Row(
                   children: [
                     Container(
@@ -88,17 +88,18 @@ class _ItemDescription extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child:  Text(
-                        '${item.isAlive ? 'ALIVE' : 'DEAD'}',
-                        style: textTheme.labelLarge!.copyWith(
-                          color: item.isAlive ? Colors.lightGreen : Colors.redAccent,
+                        '\$  ${item.cost ?? ''}',
+                        style: textTheme.bodyMedium!.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
                         ),
                       ),
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      '${item.gender ?? ''}',
-                      style: textTheme.labelSmall!.copyWith(
-                        color: colorScheme.onSurfaceVariant,
+                      '${item.kcal ?? ''} Kcal',
+                      style: textTheme.labelLarge!.copyWith(
+                        color: Colors.black26,
                       ),
                     ),
                   ],

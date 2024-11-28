@@ -91,8 +91,8 @@ class CustomTheme extends ThemeExtension<CustomTheme> {
   }
 
   ThemeData _base(final ColorScheme colorScheme) {
-    final primaryTextTheme = GoogleFonts.exoTextTheme();
-    final secondaryTextTheme = GoogleFonts.neuchaTextTheme();
+    final primaryTextTheme = GoogleFonts.sourceSans3TextTheme();
+    final secondaryTextTheme = GoogleFonts.sourceSans3TextTheme();
     final textTheme = primaryTextTheme.copyWith(
       displaySmall: secondaryTextTheme.displaySmall,
       displayMedium: secondaryTextTheme.displayMedium,

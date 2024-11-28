@@ -5,7 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kues/listvew_with_filters/domain/entity/character.dart';
 import 'package:kues/listvew_with_filters/domain/usecase/get_all_characters.dart';
 import 'package:kues/listvew_with_filters/presentation/shared/character_list_item.dart';
-import 'package:kues/listvew_with_filters/presentation/shared/character_list_item_loading.dart';
+import 'package:kues/listvew_with_filters/presentation/using_bloc/cart_page/bloc/cart_bloc.dart';
+import 'package:kues/listvew_with_filters/presentation/using_bloc/cart_page/bloc/cart_state.dart';
 import 'package:kues/listvew_with_filters/presentation/using_bloc/cart_page/bloc/quantity_cubit.dart';
 import 'package:kues/listvew_with_filters/presentation/using_bloc/cart_page/data/cart_repo.dart';
 import 'package:kues/listvew_with_filters/presentation/using_bloc/cart_page/view/cart_view.dart';
@@ -56,7 +57,7 @@ class _Content extends StatefulWidget {
   State<_Content> createState() => __ContentState();
 }
 
-class __ContentState extends State<_Content> {
+class __ContentState extends State<_Content> with TickerProviderStateMixin{
   final _scrollController = ScrollController();
 
   CharacterPageBloc get pageBloc => context.read<CharacterPageBloc>();
@@ -65,21 +66,36 @@ class __ContentState extends State<_Content> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
+    _controller = AnimationController(
+      duration: Duration(seconds: 1),
+      vsync: this,
+    );
+    _animation = Tween<double>(begin: 0, end: 24).animate(_controller);
+
+    //_controller.repeat(reverse: true);
   }
 
   int _currentIndex = 0;
+  late AnimationController _controller;
+  late Animation<double> _animation;
 
   @override
   Widget build(BuildContext ctx) {
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
     final list = ctx.select((CharacterPageBloc b) => b.state.characters);
     final hasEnded = ctx.select((CharacterPageBloc b) => b.state.hasReachedEnd);
+    bool isVisible = false ;
+    double margin = 0 ;
 
     return Scaffold(
       backgroundColor: Colors.white,
+      extendBodyBehindAppBar: false,
+
       appBar: PreferredSize(
-        preferredSize:
-        const Size.fromHeight(50.0), // here the desired height
+        preferredSize: const Size.fromHeight(50.0), // here the desired height
         child: AppBar(
+          surfaceTintColor: Colors.transparent,
           backgroundColor: Colors.white,
           elevation: 0,
           leading: IconButton(
@@ -96,18 +112,17 @@ class __ContentState extends State<_Content> {
           ),
           centerTitle: true,
           title: Container(
-            padding:
-            EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
             decoration: BoxDecoration(
               color: Colors.black,
               borderRadius: BorderRadius.circular(32),
             ),
-            child: const Row(
+            child:  Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   "100a Ealing Rd",
-                  style: TextStyle(
+                  style: textTheme.bodyMedium!.copyWith(
                     color: Colors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -116,13 +131,13 @@ class __ContentState extends State<_Content> {
                 SizedBox(width: 8),
                 Text(
                   "•",
-                  style: TextStyle(
+                  style: textTheme.bodyMedium!.copyWith(
                       color: Colors.white, fontSize: 14),
                 ),
                 SizedBox(width: 8),
                 Text(
                   "24 mins",
-                  style: TextStyle(
+                  style: textTheme.bodyMedium!.copyWith(
                     color: Colors.white,
                     fontSize: 14,
                   ),
@@ -140,7 +155,144 @@ class __ContentState extends State<_Content> {
           ],
         ),
       ),
-      body: Padding(
+      body: Stack(
+        children: [
+
+          CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                backgroundColor: Colors.white,
+                expandedHeight: 400.0,
+                flexibleSpace: FlexibleSpaceBar(
+                  background: Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.only(left: 24, right: 16,top: 8, bottom: 8),
+                        alignment: Alignment.topLeft,
+                        child: Text('Hits Of the week', style: textTheme.headlineSmall!.copyWith(
+                          fontWeight: FontWeight.bold,),),
+                      ),
+
+                      CarouselSlider(
+                        options: CarouselOptions(
+                            onPageChanged: (value, _) {
+                              setState(() {
+                                _currentIndex = value;
+                              });
+                            },
+                            viewportFraction: 1,
+                            enlargeCenterPage: false, height: 300),
+                        items: list
+                            .take(4)
+                            .map((item) => Container(
+                          color: Colors.white,
+                          child: Center(
+                            child: Container(
+                              height: 300,
+                              width: 400,
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                gradient: const LinearGradient(
+                                  colors: [Colors.white, Colors.white],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                              ),
+                              child: buildCarouselSliderStack(item,textTheme),
+                            ),
+                          ),
+                        ),)
+                            .toList(),
+                      ),
+                      buildCarouselIndicator(),
+                    ],
+                  ),
+                ),
+              ),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                    return CharacterListItem(item: list[index],onTap: _goToDetails);
+                  },
+                  childCount: list.length,
+                ),
+              )
+            ],
+          ),
+    Positioned.fill(
+    child: Align(
+    alignment: Alignment.bottomCenter,
+    child: BlocBuilder<CartBloc, CartState>(
+    builder: (context, state) {
+      if (!state.items.isEmpty) {
+        _controller.forward();
+        isVisible =true;
+      }
+      else
+        {
+          _controller.reverse();
+          isVisible =false;
+        }
+
+      return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        return Visibility(
+            visible: isVisible,
+            child: AnimatedContainer(
+              margin: EdgeInsets.symmetric(horizontal: 16, vertical: _animation.value),
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              duration: Duration(seconds: 2),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Cart",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "24 min",
+                        style: TextStyle(
+                          color: Colors.grey[400],
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Text(
+                        "• \$ ${state.totalPrice}",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ));
+      });
+
+
+
+    },)),),
+          ]
+      )
+
+
+      /*Padding(
         padding: const EdgeInsets.only(left: 0, right: 0),
         child: ListView.builder(
           key: const ValueKey('character_page_list_key'),
@@ -198,7 +350,7 @@ class __ContentState extends State<_Content> {
                 ),
                 buildCarouselIndicator(),
 
-                /*const CharacterListItemHeader(titleText: 'All Characters'),*/
+                */ /*const CharacterListItemHeader(titleText: 'All Characters'),*/ /*
                 const SizedBox(
                   height: 16,
                 ),
@@ -214,68 +366,55 @@ class __ContentState extends State<_Content> {
             );
           },
         ),
-      ),
+      ),*/
     );
   }
 
-  Widget buildCarouselSliderStack(Character item) {
-   return Stack(
+  Widget buildCarouselSliderStack(Character item,var textTheme) {
+    return Stack(
       children: [
         Positioned.fill(
           child: Align(
             alignment: Alignment.bottomCenter,
             child: Container(
               padding: const EdgeInsets.all(24),
-              height: 260,
+              height: 250,
               decoration: BoxDecoration(
-                borderRadius:
-                BorderRadius.circular(16),
-                gradient: LinearGradient(
+                borderRadius: BorderRadius.circular(16),
+                gradient: const LinearGradient(
                     colors: [
-                      const Color(0xFF87C6FE),
-                      const Color(0xFFCBCAFF),
+                      Color(0xFF87C6FE),
+                      Color(0xFFCBCAFF),
                     ],
-                    begin:
-                    const FractionalOffset(
-                        0.0, 0.0),
-                    end: const FractionalOffset(
-                        1.0, 1.0),
+                    begin: FractionalOffset(0.0, 0.0),
+                    end: FractionalOffset(1.0, 1.0),
                     stops: [0.0, 0.9],
                     tileMode: TileMode.clamp),
               ),
               alignment: Alignment.bottomCenter,
               child: Row(
-                mainAxisAlignment:
-                MainAxisAlignment
-                    .spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     item.name ?? '',
-                    style: const TextStyle(
+                    style: textTheme.bodyLarge!.copyWith(
                       color: Colors.black,
-                      fontSize: 14,
-                      fontWeight:
-                      FontWeight.bold,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets
-                        .symmetric(
-                        horizontal: 12,
-                        vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
                       color: Colors.black,
-                      borderRadius:
-                      BorderRadius.circular(
-                          32),
+                      borderRadius: BorderRadius.circular(32),
                     ),
-                    child: const Text(
-                      '\$12.40',
-                      style: TextStyle(
+                    child: Text(
+                      '\$ ${item.cost ?? ''}',
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 14,
-                        fontWeight:
-                        FontWeight.bold,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -288,14 +427,14 @@ class __ContentState extends State<_Content> {
           child: Align(
             alignment: Alignment.topCenter,
             child: Container(
-              width: 180.0,
-              height: 180.0,
+              width: 190.0,
+              height: 190.0,
               decoration: new BoxDecoration(
                 shape: BoxShape.circle,
                 image: new DecorationImage(
                   fit: BoxFit.fill,
-                  image: new CachedNetworkImageProvider(
-                      item.image ?? 'https://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784.jpg'),
+                  image: new CachedNetworkImageProvider(item.image ??
+                      'https://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784.jpg'),
                 ),
               ),
             ),
@@ -309,20 +448,20 @@ class __ContentState extends State<_Content> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        for(int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
           AnimatedContainer(
-              width: MediaQuery.sizeOf(context).width / 5,
-              height: 4,
-              margin: EdgeInsets.symmetric(horizontal: 4),
-              decoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(8),
-                color: _currentIndex == i ? Colors.black : Colors.black12,
-              ), duration: const Duration(milliseconds: 400),
+            width: MediaQuery.sizeOf(context).width / 5,
+            height: 4,
+            margin: EdgeInsets.symmetric(horizontal: 4),
+            decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.circular(8),
+              color: _currentIndex == i ? Colors.black : Colors.black12,
             ),
+            duration: const Duration(milliseconds: 400),
+          ),
       ],
     );
-
   }
 
   final cartRepository = CartRepository();
@@ -346,7 +485,7 @@ class __ContentState extends State<_Content> {
       isScrollControlled: true,
       context: context,
       builder: (context) => FractionallySizedBox(
-          heightFactor: 0.9,
+          heightFactor: 0.95,
           child: MultiBlocProvider(
             providers: [
               /*BlocProvider(
@@ -368,16 +507,15 @@ class __ContentState extends State<_Content> {
   }
 
   void _goToCart() {
-
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
       builder: (context) => FractionallySizedBox(
-      heightFactor: 0.9,
-      child:BlocProvider(
-        create: (context) => CartQuantityCubit(),
-        child: CartPage(),
-      ),
+        heightFactor: 0.95,
+        child: BlocProvider(
+          create: (context) => CartQuantityCubit(),
+          child: CartPage(),
+        ),
       ),
       backgroundColor: Colors.transparent,
     );
@@ -385,6 +523,7 @@ class __ContentState extends State<_Content> {
 
   @override
   void dispose() {
+    _controller.dispose();
     _scrollController
       ..removeListener(_onScroll)
       ..dispose();

@@ -25,5 +25,5 @@ class CartRepository {
   }
 
   double get totalPrice =>
-      _items.fold(0, (total, item) => total + (item.quantity! * item.quantity!));
+      _items.fold(0, (total, item) => total + (item.quantity! * double.parse(item.cost!)));
 }

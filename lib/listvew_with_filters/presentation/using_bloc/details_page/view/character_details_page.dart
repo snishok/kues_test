@@ -42,7 +42,7 @@ class CharacterDetailsView extends StatelessWidget {
       backgroundColor: Colors.transparent,
       body: Column(children: [
         Container(
-          margin: const EdgeInsets.only(top: 16, bottom: 16),
+          margin: const EdgeInsets.only(top: 16, bottom: 8),
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.all(
@@ -86,21 +86,25 @@ class _Content extends StatelessWidget {
           );
 
           return Container(
-            height: MediaQuery.sizeOf(context).height * 0.82,
+            height: MediaQuery.sizeOf(context).height * 0.85,
               child: Stack(
               children: [
 
               Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Hero(
-                tag: character.id!,
-                child: CachedNetworkImage(
-                  imageUrl: character.image!,
-                  fit: BoxFit.fitHeight,
-                  height: 300,
+              Container(
+                padding: const EdgeInsets.only(top: 24, bottom: 8),
+                child: Hero(
+                  tag: character.id!,
+                  child: CachedNetworkImage(
+                    imageUrl: character.image!,
+                    fit: BoxFit.fitHeight,
+                    height: 300,
+                  ),
                 ),
               ),
+
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Padding(
@@ -110,16 +114,16 @@ class _Content extends StatelessWidget {
                     children: [
                       Text(
                         character.name ?? '',
-                        style: textTheme.displaySmall!.copyWith(
+                        style:  textTheme.headlineSmall!.copyWith(
                           color: colorScheme.onSurfaceVariant,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        'Origin: ${character.origin?.name ?? ''}',
+                        '${character.desc ?? ''}',
                         style: textTheme.bodyMedium!.copyWith(
-                          color: colorScheme.onSurfaceVariant,
+                          color: Colors.black26,
                         ),
                       ),
                       // const SizedBox(height: 4),
@@ -159,7 +163,7 @@ class _Content extends StatelessWidget {
                   ),
                 )
               ),
-              SizedBox(
+              const SizedBox(
                 height: 32,
               ),
               Padding(
@@ -170,7 +174,8 @@ class _Content extends StatelessWidget {
                   Text(
                     'Add in Poke',
                     style: textTheme.bodyLarge!.copyWith(
-                      color: colorScheme.onSurfaceVariant,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black,
                     ),
                   ),
                   Icon(
@@ -195,7 +200,7 @@ class _Content extends StatelessWidget {
                       // Quantity Selector
                       Container(
                         decoration: BoxDecoration(
-                          color: Colors.grey,
+                          color: Colors.black12,
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Row(
@@ -231,7 +236,7 @@ class _Content extends StatelessWidget {
                           return ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.black,
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                 horizontal: 24,
                                 vertical: 12,
                               ),
@@ -241,20 +246,19 @@ class _Content extends StatelessWidget {
                             ),
                             onPressed: () {
                               context.read<CartBloc>().add(AddToCart(character));
+                              Navigator.of(context).pop();
                             },
                             child: Row(
                               children: [
                                 Text(
                                   'Add to cart',
-                                  style: TextStyle(
-                                      fontSize: 16, color: Colors.white),
+                                  style: textTheme.bodyMedium!.copyWith(
+                                      color: Colors.white),
                                 ),
-                                SizedBox(width: 8),
+                                const SizedBox(width: 8),
                                 Text(
-                                  '\$${(47.00 * quantity).toStringAsFixed(2)}',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
+                                  '\$${(double.parse(character.cost!) * quantity).toStringAsFixed(2)}',
+                                  style: textTheme.bodyMedium!.copyWith(
                                     color: Colors.white,
                                   ),
                                 ),
@@ -279,15 +283,16 @@ class _Content extends StatelessWidget {
         Text(
           value,
           style: const TextStyle(
+            color: Colors.black87,
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
         ),
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
+            color: Colors.black26,
             fontSize: 12,
-            color: Colors.grey[600],
           ),
         ),
       ],
@@ -326,7 +331,7 @@ class EpisodeItem extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(16)),
-          color: colorScheme.surfaceVariant,
+          color: colorScheme.surfaceContainerHighest,
         ),
         height: 80,
         width: 80,

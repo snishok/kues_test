@@ -24,10 +24,73 @@ class LocalStorageImpl implements LocalStorage {
   List<CharacterDto> loadCharactersPage({required int page}) {
     final key = getKeyToPage(page);
     final jsonList = _sharedPref.getStringList(key);
-
-    return jsonList != null
-        ? jsonList.map((e) => CharacterDto.fromRawJson(e)).toList()
-        : [];
+    List<CharacterDto>? test = [];
+    test.add(new CharacterDto(
+      id: 1,
+      name: 'Poke with chicken and corn',
+      desc: 'Fresh and crisp vegetable medley bursting with vibrant flavors. Tossed with a light dressing for the perfect balance. A wholesome delight for your healthy cravings!',
+      kcal: '800',
+      grams: '400',
+      proteins: '300',
+      fats: '50',
+      carb: '50',
+      cost: '62.00',
+      image: 'https://jzgmnvzpovllorpsichi.supabase.co/storage/v1/object/public/images/test_images/Food-Plate.png',
+      quantity: 1
+    ));
+    test.add(new CharacterDto(
+        id: 5,
+        name: 'Vegetable salad',
+        desc: 'Fresh and crisp vegetable medley bursting with vibrant flavors. Tossed with a light dressing for the perfect balance. A wholesome delight for your healthy cravings!',
+        kcal: '231',
+        grams: '100',
+        proteins: '30',
+        fats: '10',
+        carb: '10',
+        cost: '43.00',
+        image: 'https://jzgmnvzpovllorpsichi.supabase.co/storage/v1/object/public/images/test_images/Salad2.png',
+        quantity: 1
+    ));
+    test.add(new CharacterDto(
+        id: 3,
+        name: 'Indian Chutney',
+        desc: 'Fresh and crisp vegetable medley bursting with vibrant flavors. Tossed with a light dressing for the perfect balance. A wholesome delight for your healthy cravings!',
+        kcal: '185',
+        grams: '50',
+        proteins: '5',
+        fats: '10',
+        carb: '35',
+        cost: '42.00',
+        image: 'https://jzgmnvzpovllorpsichi.supabase.co/storage/v1/object/public/images/test_images/Indian-Chutney.png',
+        quantity: 1
+    ));
+    test.add(new CharacterDto(
+        id: 4,
+        name: 'Pizza Tuscan Sun Delight',
+        desc: 'Indulge in the perfect harmony of gooey cheese, rich tomato sauce, and golden, crispy crust. Topped with the freshest ingredients for an irresistible burst of flavor. A slice of heaven in every bite!',
+        kcal: '923',
+        grams: '300',
+        proteins: '20',
+        fats: '250',
+        carb: '100',
+        cost: '35.00',
+        image: 'https://jzgmnvzpovllorpsichi.supabase.co/storage/v1/object/public/images/test_images/Pizza.png',
+        quantity: 1
+    ));
+    test.add(new CharacterDto(
+        id: 2,
+        name: 'Grilled Chicken',
+        desc: 'Savor the smoky perfection of tender, juicy grilled chicken, seared to golden excellence. Infused with a blend of herbs and spices for a mouthwatering flavor. A protein-packed delight that’s both healthy and delicious!',
+        kcal: '600',
+        grams: '400',
+        proteins: '250',
+        fats: '40',
+        carb: '110',
+        cost: '36.00',
+        image: 'https://jzgmnvzpovllorpsichi.supabase.co/storage/v1/object/public/images/test_images/Grilled-Chicken.png',
+        quantity: 1
+    ));
+    return test ?? [];
   }
 
   @override
